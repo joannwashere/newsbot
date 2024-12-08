@@ -5,7 +5,7 @@ from textblob import TextBlob
 
 # Function to fetch news
 def fetch_news():
-    categories = ["Forbes", "Sports", "Health", "Entertainment", "Technology"]
+    categories = ["Forbes", "The Guardian", "CBS Sports", "Yahoo Sports", "Health", "Entertainment", "Technology"]
     news_list = []
 
     for category in categories:
