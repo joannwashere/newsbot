@@ -33,8 +33,8 @@ def analyze_sentiment(text):
         return 'Neutral'
 
 # Streamlit app layout
-st.title("Positive News Finder")
-st.write("Get the latest news based on your mood. Let's keep it positive! 🌟")
+st.title("NewsBot")
+st.write("Get the latest news from your usual outlet, based on your mood! 🌟")
 
 # Mood input
 user_mood = st.text_input("How are you feeling today?")
@@ -51,7 +51,7 @@ if user_mood:
 
     # News category selection
     categories = news_df['Category'].unique().tolist()
-    selected_category = st.selectbox("Choose a news category:", categories)
+    selected_category = st.selectbox("Choose a news outlet:", categories)
 
     if selected_category:
         filtered_news = news_df[news_df['Category'] == selected_category]
