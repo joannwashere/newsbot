@@ -5,7 +5,7 @@ from textblob import TextBlob
 
 # Function to fetch news
 def fetch_news():
-    categories = ["Entertainment", "Technology", "Finance", "Sports", "Health"]
+    categories = ["Technology", "Finance", "Entertainment", "Sports", "Health"]
     news_list = []
 
     for category in categories:
@@ -49,10 +49,6 @@ if user_mood:
     # Perform sentiment analysis on news titles
     news_df['Sentiment'] = news_df['Title'].apply(analyze_sentiment)
 
-    # Filter news by sentiment
-    positive_news = news_df[news_df['Sentiment'] == 'Positive']
-    negative_news = news_df[news_df['Sentiment'] == 'Negative']
-
     # News category selection
     categories = news_df['Category'].unique().tolist()
     selected_category = st.selectbox("Choose a news category:", categories)
@@ -60,18 +56,19 @@ if user_mood:
     if selected_category:
         filtered_news = news_df[news_df['Category'] == selected_category]
 
-        # Format the table
+        # Apply mood-based filtering
+        if user_sentiment == 'Positive':
+            st.write(f"Here's the latest {selected_category} news for you:")
+        elif user_sentiment in ['Negative', 'Neutral']:
+            filtered_news = filtered_news[filtered_news['Sentiment'] == 'Positive']
+            st.write(f"Here's some positive {selected_category} news to brighten your day:")
+
+        # Format the table with hyperlinks
         def create_hyperlink(row):
             return f'<a href="{row["URL"]}" target="_blank">Link</a>'
 
         filtered_news['Link'] = filtered_news.apply(create_hyperlink, axis=1)
         filtered_news = filtered_news[['Title', 'Link']]
-
-        # Display table in Streamlit with hyperlinks
-        if user_sentiment == 'Positive':
-            st.write(f"Here's the latest {selected_category} news for you:")
-        elif user_sentiment in ['Negative', 'Neutral']:
-            st.write(f"Here's some positive {selected_category} news to brighten your day:")
 
         st.markdown(
             filtered_news.to_html(escape=False, index=False),
